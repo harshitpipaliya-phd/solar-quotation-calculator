@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solar Panel Quotation Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    .calculator {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+      color: #34495e;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    button {
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #calculateBtn {
+      background-color: #2980b9;
+      color: white;
+      border: none;
+    }
+
+    #calculateBtn:hover {
+      background-color: #1c5980;
+    }
+
+    #whatsappBtn {
+      background-color: #25D366;
+      color: white;
+      border: none;
+      display: none;
+    }
+
+    .results {
+      background: #ecf9ec;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 25px;
+    }
+
+    .results p {
+      font-size: 16px;
+      color: #2d3436;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Solar Panel Quotation Calculator</h1>
+  <div class="calculator">
+
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" required placeholder="Enter your full name">
+
+    <label for="contact">Contact Number:</label>
+    <input type="tel" id="contact" required placeholder="10-digit phone number" maxlength="10" pattern="[0-9]{10}">
+
+    <label for="city">City (District of Gujarat):</label>
+    <select id="city" required>
+      <option value="">Select District</option>
+      <option>Ahmedabad</option>
+      <option>Surat</option>
+      <option>Rajkot</option>
+      <option>Vadodara</option>
+      <option>Bhavnagar</option>
+      <option>Jamnagar</option>
+      <option>Junagadh</option>
+      <option>Gandhinagar</option>
+      <option>Kutch</option>
+      <option>Morbi</option>
+      <option>Narmada</option>
+      <option>Navsari</option>
+      <option>Patan</option>
+      <option>Porbandar</option>
+      <option>Sabar Kantha</option>
+      <option>Tapi</option>
+      <option>Valsad</option>
+    </select>
+
+    <label for="category">Category:</label>
+    <select id="category" required>
+      <option>Residential</option>
+      <option>Commercial</option>
+      <option>Industrial</option>
+      <option>Social Sector</option>
+    </select>
+
+    <label for="bill">Average Monthly Bill (₹):</label>
+    <input type="number" id="bill" required placeholder="e.g. 2500">
+
+    <label for="area">Available Rooftop Area (sqft):</label>
+    <input type="number" id="area" required placeholder="e.g. 300">
+
+    <div id="results" class="results" style="display:none;">
+      <h3>Quotation Summary</h3>
+      <p><strong>Name:</strong> <span id="summaryName"></span></p>
+      <p><strong>Contact:</strong> <span id="summaryContact"></span></p>
+      <p><strong>City:</strong> <span id="summaryCity"></span></p>
+      <p><strong>Category:</strong> <span id="summaryCategory"></span></p>
+      <p><strong>Monthly Bill:</strong> ₹<span id="summaryBill"></span></p>
+      <p><strong>Available Rooftop Area:</strong> <span id="summaryArea"></span> sqft</p>
+      <p><strong>Required System Size:</strong> <span id="summaryKw"></span> kW</p>
+      <p><strong>Area Required:</strong> <span id="summaryAreaReq"></span> sqft</p>
+      <p><strong>Estimated Cost:</strong> ₹<span id="summaryCost"></span></p>
+    </div>
+
+    <button id="calculateBtn" onclick="generateQuotation()">Get Quotation</button>
+    <button id="whatsappBtn" onclick="sendWhatsApp()">Send on WhatsApp</button>
+
+  </div>
+
+  <script>
+    function generateQuotation() {
+      const name = document.getElementById("name").value.trim();
+      const contact = document.getElementById("contact").value.trim();
+      const city = document.getElementById("city").value;
+      const category = document.getElementById("category").value;
+      const bill = parseFloat(document.getElementById("bill").value);
+      const area = parseFloat(document.getElementById("area").value);
+
+      if (!name || !/^[0-9]{10}$/.test(contact) || !city || isNaN(bill) || isNaN(area)) {
+        alert("Please enter valid information. Phone number must be exactly 10 digits.");
+        return;
+      }
+
+      let systemKw = 1;
+      if (bill > 1000 && bill <= 2000) systemKw = 2;
+      else if (bill > 2000 && bill <= 2500) systemKw = 2.5;
+      else if (bill > 2500 && bill <= 3000) systemKw = 3;
+      else if (bill > 3000 && bill <= 3500) systemKw = 3.5;
+      else if (bill > 3500 && bill <= 4000) systemKw = 4;
+      else if (bill > 4000 && bill <= 4500) systemKw = 4.5;
+      else if (bill > 4500 && bill <= 5000) systemKw = 5;
+      else if (bill > 5000) systemKw = Math.ceil(bill / 1000);
+
+      
+      let estimatedCost = 0;
+      if (systemKw === 3) {
+        estimatedCost = 100000;
+      } else if (systemKw === 4) {
+        estimatedCost = 130000;
+      } else if (systemKw === 5) {
+        estimatedCost = 150000;
+      } else if (systemKw < 3) {
+        estimatedCost = systemKw * 33000; // proportional to 1L/3kW
+      } else if (systemKw > 5) {
+        estimatedCost = 150000 + ((systemKw - 5) * 25000); // add 25k per kW over 5
+      }
+    
+      let areaRequired = systemKw * 70;
+
+      document.getElementById("summaryName").textContent = name;
+      document.getElementById("summaryContact").textContent = contact;
+      document.getElementById("summaryCity").textContent = city;
+      document.getElementById("summaryCategory").textContent = category;
+      document.getElementById("summaryBill").textContent = bill.toFixed(2);
+      document.getElementById("summaryArea").textContent = area;
+      document.getElementById("summaryKw").textContent = systemKw.toFixed(1);
+      document.getElementById("summaryAreaReq").textContent = areaRequired.toFixed(1);
+      document.getElementById("summaryCost").textContent = estimatedCost.toLocaleString();
+
+      document.getElementById("results").style.display = "block";
+      document.getElementById("whatsappBtn").style.display = "block";
+    }
+
+    function sendWhatsApp() {
+      const phone = "91XXXXXXXXXX"; // Replace with your WhatsApp number
+
+      const name = document.getElementById("name").value;
+      const contact = document.getElementById("contact").value;
+      const city = document.getElementById("city").value;
+      const category = document.getElementById("category").value;
+      const bill = document.getElementById("bill").value;
+      const kw = document.getElementById("summaryKw").textContent;
+      const estimatedCost = document.getElementById("summaryCost").textContent;
+      const area = document.getElementById("area").value;
+      const areaReq = document.getElementById("summaryAreaReq").textContent;
+
+      const message = `🌞 *Solar Panel Quotation* 🌞
+Name: ${name}
+Contact: ${contact}
+City: ${city}
+Category: ${category}
+Monthly Bill: ₹${bill}
+Rooftop Area: ${area} sqft
+
+🔧 *System Required:* ${kw} kW
+📐 *Area Required:* ${areaReq} sqft
+💰 *Estimated Cost:* ₹${estimatedCost}
+
+Please contact me for more information.`;
+
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+  </script>
+
+</body>
+</html>
