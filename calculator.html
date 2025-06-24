@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Calculator</title>
+    <style>
+        * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+body {
+    background-color: #f1f1f1;
+    color: #2c2c2c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #ff6b00;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 1rem;
+    opacity: 0.95;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
+}
+
+.calculator-container {
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin: auto;
+}
+
+.calculator-section {
+    padding: 30px;
+}
+
+.calculator-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.calculator-title {
+    font-size: 1.5rem;
+    color: #2c2c2c;
+    font-weight: 600;
+    text-align: center;
+}
+
+.selection-screen {
+    text-align: center;
+    padding: 30px;
+}
+
+.selection-title {
+    font-size: 1.5rem;
+    color: #2c2c2c;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.selection-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.selection-option {
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection-option i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.selection-option:hover {
+    background-color: #e05d00;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #2c2c2c;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #ff6b00;
+    box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+}
+
+.bill-slider-container {
+    margin-top: 20px;
+}
+
+.bill-slider {
+    width: 100%;
+    height: 8px;
+    appearance: none;
+    background: #ccc;
+    border-radius: 4px;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+.bill-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ff6b00;
+    cursor: pointer;
+    border: 4px solid white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.bill-amount-display {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.bill-amount-display span {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+
+.bill-presets {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bill-preset {
+    flex: 1;
+    min-width: calc(25% - 10px);
+    padding: 8px 12px;
+    background: #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2c2c2c;
+    cursor: pointer;
+    border: none;
+}
+
+.bill-preset:hover {
+    background: #cccccc;
+}
+
+.bill-preset.active {
+    background: #ff6b00;
+    color: white;
+}
+
+.results-container {
+    margin-top: 30px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.results-header {
+    font-size: 1.3rem;
+    color: #2c2c2c;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+.result-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+.highlight-value {
+    color: #ff6b00;
+    font-weight: 700;
+}
+
+.contact-note {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.contact-note h5 {
+    margin-top: 10px;
+    color: #2c2c2c;
+    font-weight: 500;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+.back-to-menu-btn {
+    width: 100%;
+    padding: 5px;
+    border-radius: 8px;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    border: 1px solid #ff6b00;
+    background-color: white;
+    color: #ff6b00;
+    margin-top: 15px;
+}
+
+.back-to-menu-btn:hover {
+    background-color: #fff0e6;
+}
+
+.back-to-menu-btn i {
+    margin-right: 8px;
+    font-size: 1rem;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    border: none;
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+}
+
+.whatsapp-btn:hover {
+    background-color: #128C7E;
+}
+
+.call-btn {
+    background-color: #ff6b00;
+    color: white;
+}
+
+.call-btn:hover {
+    background-color: #e05d00;
+}
+
+.action-btn i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.simple-contact-form {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .calculator-container {
+        border-radius: 0;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .bill-preset {
+        min-width: calc(50% - 8px);
+    }
+
+    .calculator-section {
+        padding: 20px;
+    }
+
+    .selection-title, .calculator-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bill-preset {
+        min-width: 100%;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .header p {
+        font-size: 0.9rem;
+    }
+}
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>Solar Calculator</h1>
+            <p>Discover your perfect solar solution</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="calculator-container">
+                <!-- Initial Selection Screen -->
+                <div class="selection-screen" id="selectionScreen">
+                    <h2 class="selection-title">Select a Solar Solution</h2>
+                    <div class="selection-options">
+                        <button class="selection-option" id="selectResidential">
+                            <i class="fas fa-home"></i> Residential Solar
+                        </button>
+                        <button class="selection-option" id="selectIndustrial">
+                            <i class="fas fa-industry"></i> Industrial Solar
+                        </button>
+                        <button class="selection-option" id="selectCommercial">
+                            <i class="fas fa-building"></i> Commercial Solar
+                        </button>
+                        <button class="selection-option" id="selectCommonBuilding">
+                            <i class="fas fa-city"></i> Common Building
+                        </button>
+                        <button class="selection-option" id="selectGroundMounted">
+                            <i class="fas fa-solar-panel"></i> Ground Mounted
+                        </button>
+                    </div>
+                </div>
+				
+
+                <!-- Residential Calculator -->
+                <div id="residentialCalculator" class="hidden calculator-section">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Residential Solar Calculator</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="firstName">Your Name</label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobileNumber">Mobile Number</label>
+                        <input type="tel" id="mobileNumber" class="form-control" placeholder="Enter 10-digit mobile number" maxlength="10"required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" class="form-control" placeholder="Enter your city name" maxlength="30"required>
+                    </div>required
+
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" class="form-control" placeholder="Enter your 6-digit pincode" maxlength="6"required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Average Monthly Electricity Bill</label>
+                        <div class="bill-slider-container">
+                            <input type="range" min="1000" max="15000" step="100" value="0" class="bill-slider" id="billSlider">
+                            <div class="bill-amount-display">
+  ₹<span id="billAmount">5,000</span> <span class="per-month">/month</span>
+</div>
+
+                            <div class="bill-presets">
+                                <button class="bill-preset" data-amount="2000">₹2K</button>
+                                <button class="bill-preset" data-amount="3000">₹3K</button>
+                                <button class="bill-preset" data-amount="5000">₹5K</button>
+                                <button class="bill-preset" data-amount="10000">₹10K</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-container">
+                        <div class="results-header">Your Solar Savings</div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Recommended System Size</div>
+                            <div class="result-value" id="systemSize">00 kW</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Approximate System Cost</div>
+                            <div class="result-value" id="systemCost">₹00</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Subsidy</div>
+                            <div class="result-value highlight-value" id="subsidyAmount">₹00</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Your Cost After Subsidy</div>
+                            <div class="result-value" id="finalCost">₹0</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Monthly Savings</div>
+                            <div class="result-value highlight-value" id="monthlySavings">₹00</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Annual Savings</div>
+                            <div class="result-value highlight-value" id="annualSavings">₹00</div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-label">Payback Period</div>
+                            <div class="result-value" id="paybackPeriod">00 years</div>
+                        </div>
+
+                        <div class="contact-note">
+                          <h2>Thank you for using our calculator!</h2><h3>Please remember this is just a preliminary estimate. Our team will provide you with a detailed and final quotation after a free site visit, where we inspect the rooftop and understand your actual power needs.</h3>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn whatsapp-btn" id="whatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="action-btn call-btn" id="callBtn">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+							
+                        </div>
+						<button class="back-to-menu-btn" onclick="showSelectionScreen()">
+    <i class="fas fa-arrow-left"></i> Back to Menu
+</button>
+                    </div>
+                </div>
+
+                <!-- Industrial Solar Form -->
+                <div id="industrialCalculator" class="hidden calculator-section">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Industrial Solar Solutions</h2>
+                    </div>
+
+                    <div class="simple-contact-form">
+                        <div class="form-group">
+                            <label for="industrialName">Your Name</label>
+                            <input type="text" id="industrialName" class="form-control" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="industrialMobile">Mobile Number</label>
+                            <input type="tel" id="industrialMobile" class="form-control" placeholder="Enter 10-digit mobile number" maxlength="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="industrialCity">City</label>
+                            <input type="text" id="industrialCity" class="form-control" placeholder="Enter your city name" maxlength="30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="industrialPincode">Pincode</label>
+                            <input type="text" id="industrialPincode" class="form-control" placeholder="Enter your 6-digit pincode" maxlength="6">
+                        </div>
+
+                        <div class="contact-note">
+                           <h4> Thank you for your interest in industrial solar solutions. Our team will contact you shortly to discuss your requirements.</h4>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn whatsapp-btn" id="industrialWhatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="action-btn call-btn" id="industrialCallBtn">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+							
+                        </div>
+						<button class="back-to-menu-btn" onclick="showSelectionScreen()">
+    <i class="fas fa-arrow-left"></i> Back to Menu
+</button>
+                    </div>
+                </div>
+
+                <!-- Commercial Solar Form -->
+                <div id="commercialCalculator" class="hidden calculator-section">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Commercial Solar Solutions</h2>
+                    </div>
+
+                    <div class="simple-contact-form">
+                        <div class="form-group">
+                            <label for="commercialName">Your Name</label>
+                            <input type="text" id="commercialName" class="form-control" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commercialMobile">Mobile Number</label>
+                            <input type="tel" id="commercialMobile" class="form-control" placeholder="Enter 10-digit mobile number" maxlength="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="commercialCity">City</label>
+                            <input type="text" id="commercialCity" class="form-control" placeholder="Enter your city name" maxlength="30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commercialPincode">Pincode</label>
+                            <input type="text" id="commercialPincode" class="form-control" placeholder="Enter your 6-digit pincode" maxlength="6">
+                        </div>
+
+                        <div class="contact-note">
+                             <h4> Thank you for your interest in industrial solar solutions. Our team will contact you shortly to discuss your requirements.</h4>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn whatsapp-btn" id="commercialWhatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="action-btn call-btn" id="commercialCallBtn">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+                        </div>
+						<button class="back-to-menu-btn" onclick="showSelectionScreen()">
+    <i class="fas fa-arrow-left"></i> Back to Menu
+</button>
+                    </div>
+                </div>
+                
+                <!-- Common Building Solar Form -->
+                <div id="commonBuildingCalculator" class="hidden calculator-section">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Common Building Solar Solutions</h2>
+                    </div>
+
+                    <div class="simple-contact-form">
+                        <div class="form-group">
+                            <label for="commonBuildingName">Your Name</label>
+                            <input type="text" id="commonBuildingName" class="form-control" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commonBuildingMobile">Mobile Number</label>
+                            <input type="tel" id="commonBuildingMobile" class="form-control" placeholder="Enter 10-digit mobile number" maxlength="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="commonBuildingCity">City</label>
+                            <input type="text" id="commonBuildingCity" class="form-control" placeholder="Enter your city name" maxlength="30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="commonBuildingPincode">Pincode</label>
+                            <input type="text" id="commonBuildingPincode" class="form-control" placeholder="Enter your 6-digit pincode" maxlength="6">
+                        </div>
+
+                        <div class="contact-note">
+                            <h4>Thank you for your interest in industrial solar solutions. Our team will contact you shortly to discuss your requirements.</h4>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn whatsapp-btn" id="commonBuildingWhatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="action-btn call-btn" id="commonBuildingCallBtn">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+                        </div>
+						<button class="back-to-menu-btn" onclick="showSelectionScreen()">
+    <i class="fas fa-arrow-left"></i> Back to Menu
+</button>
+                    </div>
+                </div>
+                
+                <!-- Ground Mounted Solar Form -->
+                <div id="groundMountedCalculator" class="hidden calculator-section">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Ground Mounted Solar Solutions</h2>
+                    </div>
+
+                    <div class="simple-contact-form">
+                        <div class="form-group">
+                            <label for="groundMountedName">Your Name</label>
+                            <input type="text" id="groundMountedName" class="form-control" placeholder="Enter your name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groundMountedMobile">Mobile Number</label>
+                            <input type="tel" id="groundMountedMobile" class="form-control" placeholder="Enter 10-digit mobile number" maxlength="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="groundMountedCity">City</label>
+                            <input type="text" id="groundMountedCity" class="form-control" placeholder="Enter your city name" maxlength="30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="groundMountedPincode">Pincode</label>
+                            <input type="text" id="groundMountedPincode" class="form-control" placeholder="Enter your 6-digit pincode" maxlength="6">
+                        </div>
+
+                        <div class="contact-note">
+                            <h4>Thank you for your interest in ground mounted solar solutions. Our team will contact you shortly to discuss your requirements.</h4>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn whatsapp-btn" id="groundMountedWhatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="action-btn call-btn" id="groundMountedCallBtn">
+                                <i class="fas fa-phone"></i> Call Now
+                            </button>
+                        </div>
+						<button class="back-to-menu-btn" onclick="showSelectionScreen()">
+    <i class="fas fa-arrow-left"></i> Back to Menu
+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Initial selection screen handlers
+document.getElementById('selectResidential').addEventListener('click', function() {
+    showCalculator('residential');
+    initializeResidentialCalculator();
+});
+
+document.getElementById('selectIndustrial').addEventListener('click', function() {
+    showCalculator('industrial');
+});
+
+document.getElementById('selectCommercial').addEventListener('click', function() {
+    showCalculator('commercial');
+});
+
+document.getElementById('selectCommonBuilding').addEventListener('click', function() {
+    showCalculator('commonBuilding');
+});
+
+document.getElementById('selectGroundMounted').addEventListener('click', function() {
+    showCalculator('groundMounted');
+});
+
+function showCalculator(type) {
+    // Hide selection screen
+    document.getElementById('selectionScreen').classList.add('hidden');
+    
+    // Hide all calculators
+    document.getElementById('residentialCalculator').classList.add('hidden');
+    document.getElementById('industrialCalculator').classList.add('hidden');
+    document.getElementById('commercialCalculator').classList.add('hidden');
+    document.getElementById('commonBuildingCalculator').classList.add('hidden');
+    document.getElementById('groundMountedCalculator').classList.add('hidden');
+    
+    // Show selected calculator
+    document.getElementById(`${type}Calculator`).classList.remove('hidden');
+    
+    // Scroll to top of the calculator
+    document.querySelector('.main-content').scrollTo(0, 0);
+    
+    // Initialize button states for the shown calculator
+    if (type === 'residential') {
+        toggleButtonStates();
+    } else {
+        toggleGenericButtonStates(type);
+    }
+}
+function showSelectionScreen() {
+    // Hide all calculators
+    document.getElementById('residentialCalculator').classList.add('hidden');
+    document.getElementById('industrialCalculator').classList.add('hidden');
+    document.getElementById('commercialCalculator').classList.add('hidden');
+    document.getElementById('commonBuildingCalculator').classList.add('hidden');
+    document.getElementById('groundMountedCalculator').classList.add('hidden');
+    
+    // Show selection screen
+    document.getElementById('selectionScreen').classList.remove('hidden');
+    
+    // Scroll to top
+    document.querySelector('.main-content').scrollTo(0, 0);
+}
+
+// Residential Calculator Logic
+const billSlider = document.getElementById('billSlider');
+const billAmount = document.getElementById('billAmount');
+const billPresets = document.querySelectorAll('.bill-preset');
+
+// Initialize residential calculator with zeros
+function initializeResidentialCalculator() {
+    billSlider.value = 0;
+    billAmount.textContent = '0';
+    document.getElementById('systemSize').textContent = '00 kW';
+    document.getElementById('systemCost').textContent = '₹00';
+    document.getElementById('subsidyAmount').textContent = '₹00';
+    document.getElementById('finalCost').textContent = '₹00';
+    document.getElementById('monthlySavings').textContent = '₹00';
+    document.getElementById('annualSavings').textContent = '₹00';
+    document.getElementById('paybackPeriod').textContent = '00 years';
+    
+    // Reset preset buttons
+    billPresets.forEach(preset => {
+        preset.classList.remove('active');
+    });
+}
+
+// Calculate solar details based on bill amount
+function calculateSolarDetails(bill) {
+    if (bill <= 0) {
+        return {
+            systemSize: 0,
+            systemCost: 0,
+            subsidy: 0,
+            monthlySavings: 0,
+            annualSavings: 0,
+            finalCost: 0,
+            paybackPeriod: 0
+        };
+    }
+    
+    let systemSize, systemCost, subsidy, monthlySavings;
+    
+    if (bill <= 2000) {
+        systemSize = 2;
+        systemCost = 96000;
+        subsidy = 60000;
+    } else if (bill <= 3000) {
+        systemSize = 3;
+        systemCost = 144000;
+        subsidy = 78000;
+    } else if (bill <= 4000) {
+        systemSize = 4;
+        systemCost = 192000;
+        subsidy = 78000;
+    } else if (bill <= 5000) {
+        systemSize = 5;
+        systemCost = 240000;
+        subsidy = 78000;
+    } else if (bill <= 7500) {
+        systemSize = 7.5;
+        systemCost = 360000;
+        subsidy = 78000;
+    } else {
+        systemSize = Math.ceil(bill / 1000);
+        systemCost = systemSize * 48000;
+        subsidy = 78000;
+    }
+    
+    // Calculate savings (80% of bill as savings)
+    monthlySavings = bill * 0.8;
+    const annualSavings = monthlySavings * 12;
+    const finalCost = systemCost - subsidy;
+    const paybackPeriod = (finalCost / annualSavings).toFixed(1);
+    
+    return {
+        systemSize,
+        systemCost,
+        subsidy,
+        monthlySavings,
+        annualSavings,
+        finalCost,
+        paybackPeriod
+    };
+}
+
+// Update results when bill amount changes
+function updateResults() {
+    const bill = parseInt(billSlider.value);
+    billAmount.textContent = bill.toLocaleString('en-IN');
+    
+    const results = calculateSolarDetails(bill);
+    
+    // Update all result fields
+    if (bill > 0) {
+        document.getElementById('systemSize').textContent = `${results.systemSize} kW`;
+        document.getElementById('systemCost').textContent = `₹${results.systemCost.toLocaleString('en-IN')}`;
+        document.getElementById('subsidyAmount').textContent = `₹${results.subsidy.toLocaleString('en-IN')}`;
+        document.getElementById('finalCost').textContent = `₹${results.finalCost.toLocaleString('en-IN')}`;
+        document.getElementById('monthlySavings').textContent = `₹${Math.round(results.monthlySavings).toLocaleString('en-IN')}`;
+        document.getElementById('annualSavings').textContent = `₹${Math.round(results.annualSavings).toLocaleString('en-IN')}`;
+        document.getElementById('paybackPeriod').textContent = `${results.paybackPeriod} years`;
+    } else {
+        initializeResidentialCalculator();
+    }
+    
+    updatePresetActiveState(bill);
+    toggleButtonStates();
+}
+
+// Update when slider changes
+billSlider.addEventListener('input', updateResults);
+
+// Update when preset is clicked
+billPresets.forEach(preset => {
+    preset.addEventListener('click', function() {
+        const amount = this.getAttribute('data-amount');
+        billSlider.value = amount;
+        updateResults();
+    });
+});
+
+function updatePresetActiveState(currentAmount) {
+    billPresets.forEach(preset => {
+        preset.classList.remove('active');
+        if (currentAmount > 0 && preset.getAttribute('data-amount') == currentAmount) {
+            preset.classList.add('active');
+        }
+    });
+}
+
+// Initialize residential calculator when page loads
+window.addEventListener('load', function() {
+    if (document.getElementById('residentialCalculator').classList.contains('hidden') === false) {
+        initializeResidentialCalculator();
+        toggleButtonStates();
+    }
+});
+
+// Validation functions
+function validateResidentialForm() {
+    const name = document.getElementById('firstName').value.trim();
+    const mobile = document.getElementById('mobileNumber').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+    const billAmount = document.getElementById('billAmount').textContent.trim();
+    
+    return name && mobile.length === 10 && city && pincode.length === 6 && billAmount !== '0';
+}
+
+function validateForm(type) {
+    const name = document.getElementById(`${type}Name`).value.trim();
+    const mobile = document.getElementById(`${type}Mobile`).value.trim();
+    const city = document.getElementById(`${type}City`).value.trim();
+    const pincode = document.getElementById(`${type}Pincode`).value.trim();
+    
+    return name && mobile.length === 10 && city && pincode.length === 6;
+}
+
+// Button state management
+function toggleButtonStates() {
+    const whatsappBtn = document.getElementById('whatsappBtn');
+    const callBtn = document.getElementById('callBtn');
+    
+    if (whatsappBtn && callBtn) {
+        const isValid = validateResidentialForm();
+        whatsappBtn.disabled = !isValid;
+        callBtn.disabled = !isValid;
+    }
+}
+
+function toggleGenericButtonStates(type) {
+    const whatsappBtn = document.getElementById(`${type}WhatsappBtn`);
+    const callBtn = document.getElementById(`${type}CallBtn`);
+    
+    if (whatsappBtn && callBtn) {
+        const isValid = validateForm(type);
+        whatsappBtn.disabled = !isValid;
+        callBtn.disabled = !isValid;
+    }
+}
+
+// Contact button functionality
+document.getElementById('whatsappBtn')?.addEventListener('click', function() {
+    if (!validateResidentialForm()) {
+        alert('Please fill all required details before contacting us.');
+        return;
+    }
+    
+    const name = document.getElementById('firstName').value;
+    const mobile = document.getElementById('mobileNumber').value;
+    const city = document.getElementById('city').value;
+    const pincode = document.getElementById('pincode').value;
+    const billAmount = document.getElementById('billAmount').textContent;
+    
+    const message = `Hi, I'm interested in residential solar solutions.%0A%0A` +
+                    `*Name:* ${name}%0A` +
+                    `*Mobile:* ${mobile}%0A` +
+                    `*City:* ${city}%0A` +
+                    `*Pincode:* ${pincode}%0A` +
+                    `*Monthly Bill:* ₹${billAmount}%0A%0A` +
+                    `Please contact me with more details.`;
+    
+    window.open(`https://wa.me/917600198889?text=${message}`, '_blank');
+});
+
+document.getElementById('callBtn')?.addEventListener('click', function() {
+    if (!validateResidentialForm()) {
+        alert('Please fill all required details before contacting us.');
+        return;
+    }
+    window.open('tel:917600198889', '_blank');
+});
+
+function setupContactButtons(type) {
+    const whatsappBtn = document.getElementById(`${type}WhatsappBtn`);
+    const callBtn = document.getElementById(`${type}CallBtn`);
+    
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('click', function() {
+            if (!validateForm(type)) {
+                alert('Please fill all required details before contacting us.');
+                return;
+            }
+            
+            const name = document.getElementById(`${type}Name`).value;
+            const mobile = document.getElementById(`${type}Mobile`).value;
+            const city = document.getElementById(`${type}City`).value;
+            const pincode = document.getElementById(`${type}Pincode`).value;
+            
+            const message = `Hi, I'm interested in ${type.replace(/([A-Z])/g, ' $1').toLowerCase()} solar solutions.%0A%0A` +
+                            `*Name:* ${name}%0A` +
+                            `*Mobile:* ${mobile}%0A` +
+                            `*City:* ${city}%0A` +
+                            `*Pincode:* ${pincode}%0A%0A` +
+                            `Please contact me with more details.`;
+            
+            window.open(`https://wa.me/917600198889?text=${message}`, '_blank');
+        });
+    }
+    
+    if (callBtn) {
+        callBtn.addEventListener('click', function() {
+            if (!validateForm(type)) {
+                alert('Please fill all required details before contacting us.');
+                return;
+            }
+            window.open('tel:917600198889', '_blank');
+        });
+    }
+}
+
+// Input validation
+function setupInputValidation(fieldId, maxLength, isNumeric = false) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.addEventListener('input', function(e) {
+            if (isNumeric) {
+                this.value = this.value.replace(/\D/g, '').slice(0, maxLength);
+            } else {
+                this.value = this.value.slice(0, maxLength);
+            }
+            
+            // Trigger button state update after input
+            if (fieldId.includes('Name') || fieldId.includes('Mobile') || 
+                fieldId.includes('City') || fieldId.includes('Pincode')) {
+                const calculatorType = fieldId.replace(/Name|Mobile|City|Pincode/g, '');
+                if (calculatorType === 'firstName' || calculatorType === 'mobileNumber' || 
+                    calculatorType === 'city' || calculatorType === 'pincode') {
+                    toggleButtonStates();
+                } else {
+                    toggleGenericButtonStates(calculatorType);
+                }
+            }
+        });
+    }
+}
+
+// Set up input validation for all fields
+setupInputValidation('mobileNumber', 10, true);
+setupInputValidation('pincode', 6, true);
+setupInputValidation('firstName', 50);
+setupInputValidation('city', 30);
+setupInputValidation('industrialMobile', 10, true);
+setupInputValidation('industrialPincode', 6, true);
+setupInputValidation('industrialName', 50);
+setupInputValidation('industrialCity', 30);
+setupInputValidation('commercialMobile', 10, true);
+setupInputValidation('commercialPincode', 6, true);
+setupInputValidation('commercialName', 50);
+setupInputValidation('commercialCity', 30);
+setupInputValidation('commonBuildingMobile', 10, true);
+setupInputValidation('commonBuildingPincode', 6, true);
+setupInputValidation('commonBuildingName', 50);
+setupInputValidation('commonBuildingCity', 30);
+setupInputValidation('groundMountedMobile', 10, true);
+setupInputValidation('groundMountedPincode', 6, true);
+setupInputValidation('groundMountedName', 50);
+setupInputValidation('groundMountedCity', 30);
+
+// Setup contact buttons for all calculator types
+setupContactButtons('industrial');
+setupContactButtons('commercial');
+setupContactButtons('commonBuilding');
+setupContactButtons('groundMounted');
+
+// Add event listeners to residential form fields to check validity on input
+['firstName', 'mobileNumber', 'city', 'pincode'].forEach(id => {
+    const field = document.getElementById(id);
+    if (field) {
+        field.addEventListener('input', toggleButtonStates);
+    }
+});
+
+// Add event listeners to other forms
+['industrial', 'commercial', 'commonBuilding', 'groundMounted'].forEach(type => {
+    ['Name', 'Mobile', 'City', 'Pincode'].forEach(field => {
+        const fieldId = `${type}${field}`;
+        const fieldElement = document.getElementById(fieldId);
+        if (fieldElement) {
+            fieldElement.addEventListener('input', () => toggleGenericButtonStates(type));
+        }
+    });
+});
+</script>   
+</body>
+</html>
